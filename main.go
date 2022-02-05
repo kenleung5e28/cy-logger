@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -22,7 +23,10 @@ func main() {
 	}
 
 	b.Handle("/hello", func(m *tb.Message) {
-		b.Send(m.Sender, "Hello World!")
+		_, err := b.Send(m.Sender, "Hello World!")
+		if err != nil {
+			fmt.Println("Error sending message in /hello handle: ", err)
+		}
 	})
 
 	b.Start()
