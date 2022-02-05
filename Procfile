@@ -1,1 +1,1 @@
-web: bin/cy-logger
+web: bin/cy_logger
