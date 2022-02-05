@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -11,7 +12,7 @@ func main() {
 	b, err := tb.NewBot(tb.Settings{
 		// You can also set custom API URL.
 		// If field is empty it equals to "https://api.telegram.org".
-		Token:  "",
+		Token:  os.Getenv("BOT_TOKEN"),
 		Poller: &tb.LongPoller{Timeout: 20 * time.Second},
 	})
 
