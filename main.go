@@ -23,9 +23,9 @@ func main() {
 	}
 
 	b.Handle("/hello", func(m *tb.Message) {
-		_, err := b.Send(m.Sender, "Hello World!")
+		_, err := b.Send(m.Sender, fmt.Sprintf("Hello World! Chat ID: %d", m.Chat.ID))
 		if err != nil {
-			fmt.Println("Error sending message in /hello handle: ", err)
+			log.Println("Error sending message in /hello handle: ", err)
 			return
 		}
 	})
