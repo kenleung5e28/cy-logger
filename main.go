@@ -26,6 +26,7 @@ func main() {
 		_, err := b.Send(m.Sender, "Hello World!")
 		if err != nil {
 			fmt.Println("Error sending message in /hello handle: ", err)
+			return
 		}
 	})
 
