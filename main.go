@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -25,14 +24,6 @@ func requireAuth(b *tb.Bot, handler func(b *tb.Bot, m *tb.Message)) func(m *tb.M
 			return
 		}
 		handler(b, m)
-	}
-}
-
-func helloHandler(b *tb.Bot, m *tb.Message) {
-	_, err := b.Send(m.Sender, fmt.Sprintf("Hello World! Chat ID: %d", m.Chat.ID))
-	if err != nil {
-		log.Println("Error sending message in /hello handle: ", err)
-		return
 	}
 }
 
