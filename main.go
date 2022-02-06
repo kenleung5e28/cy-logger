@@ -15,6 +15,27 @@ func isAllowedUser(chatId int64) bool {
 	return err != nil || chatId == myChatId
 }
 
+func requireAuth(b *tb.Bot, handler func(b *tb.Bot, m *tb.Message)) func(m *tb.Message) {
+	return func(m *tb.Message) {
+		if !isAllowedUser(m.Chat.ID) {
+			_, err := b.Send(m.Sender, "You are not authorized, sorry.")
+			if err != nil {
+				log.Println("Error sending unauthorized message: ", err)
+			}
+			return
+		}
+		handler(b, m)
+	}
+}
+
+func helloHandler(b *tb.Bot, m *tb.Message) {
+	_, err := b.Send(m.Sender, fmt.Sprintf("Hello World! Chat ID: %d", m.Chat.ID))
+	if err != nil {
+		log.Println("Error sending message in /hello handle: ", err)
+		return
+	}
+}
+
 func main() {
 	b, err := tb.NewBot(tb.Settings{
 		// You can also set custom API URL.
@@ -28,20 +49,7 @@ func main() {
 		return
 	}
 
-	b.Handle("/hello", func(m *tb.Message) {
-		if !isAllowedUser(m.Chat.ID) {
-			_, err := b.Send(m.Sender, "You are not authorized, sorry.")
-			if err != nil {
-				log.Println("Error sending unauthorized message: ", err)
-			}
-			return
-		}
-		_, err := b.Send(m.Sender, fmt.Sprintf("Hello World! Chat ID: %d", m.Chat.ID))
-		if err != nil {
-			log.Println("Error sending message in /hello handle: ", err)
-			return
-		}
-	})
+	b.Handle("/hello", requireAuth(b, helloHandler))
 
 	b.Start()
 }
